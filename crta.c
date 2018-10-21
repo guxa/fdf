@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/19 17:25:07 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/20 19:30:28 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/20 19:55:51 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,27 @@
 
 void	breshandler(int x0, int y0, int x1, int y1, t_tabla *ta)
 {
-	if ((y1 - y0) < (x1 - x0))
+	int resy;
+	int resx;
+
+	if ((resy = y1 - y0) < 0)
+		resy = -resy;
+	if ((resx = x1 - x0) < 0)
+		resx = -resx;
+	if (resy < resx)
 	{
 		if (x0 > x1)
 			bresenhaml(x1, y1, x0, y0, ta);
 		else
 			bresenhaml(x0, y0, x1, y1, ta);
 	}
-	// else
-	// 	{
-	// 		if (y0 > y1)
-	// 			negbres(x1, y1, x0, y0);
-	// 		else
-	// 			negbres(x0, y0, x1, y1);
-	// 	}
+	else
+		{
+			if (y0 > y1)
+				bresenhi(x1, y1, x0, y0, ta);
+			else
+				bresenhi(x0, y0, x1, y1, ta);
+		}
 }
 
 void	bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta)
@@ -42,7 +49,7 @@ void	bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta)
 	dx = x1 - x0;
 	dy = y1 - y0;
 	diff = 2 * dy - dx;
-	if ((yi = 1) & dy < 0)
+	if ((yi = 1) && dy < 0)
 	{
 		dy = -dy;
 		yi = -1;
@@ -54,10 +61,39 @@ void	bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta)
 		x0++;
 		if (diff > 0)
 		{
-			y0++;
+			y0 += yi;
 			diff = diff - 2 * dx;
 		}
 		diff = diff + 2 * dy;
+	}
+}
+
+void	bresenhi(int x0, int y0, int x1, int y1, t_tabla *ta)
+{
+	int dx;
+	int dy;
+	int diff;
+	int xi;
+
+	dx = x1 - x0;
+	dy = y1 - y0;
+	diff = 2 * dy - dx;
+	if ((xi = 1) && dx < 0)
+	{
+		dx = -dx;
+		xi = -1;
+	}
+	while (y0 <= y1)
+	{
+		mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xFFFFFF);
+		//printf("%d %d\n", x0, y0);
+		y0++;
+		if (diff > 0)
+		{
+			x0 += xi;
+			diff = diff - 2 * dy;
+		}
+		diff = diff + 2 * dx;
 	}
 }
 
