@@ -6,44 +6,42 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 23:50:57 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/20 22:25:33 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/21 16:52:29 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		parsefdf(const char **filepath)
+void	tabinit(t_tabla *table)
 {
-
+	table->mlxptr = mlx_init();
+	table->winptr = mlx_new_window(table->mlxptr, 500, 500, "test");
+	table->mclicked = 0;
+	table->grid = NULL;
 }
 
 int main()
 {
-	//void	*mlx_ptr;
-	//void	*win_ptr;
-	t_tabla *table;
 	// int i;
 	// double z;
+	t_tabla *fdfobj;
+
 
 	// i = 15;
 	// z = 15;
-	table = malloc(sizeof(t_tabla));
-	table->mlxptr = mlx_init();
-	table->winptr = mlx_new_window(table->mlxptr, 500, 500, "test");
-	table->mclicked = 0;
+	fdfobj = malloc(sizeof(t_tabla));
+	tabinit(fdfobj);
+	if ((fdfobj->grid = parsefdf("fdf/maps/42.fdf")) == NULL) 
+		return (printf("Nota a valid map\n"));
 
 	//bresenhaml(0, 1, 6, 4, table);
 	//bresenhaml(1, 170, 350, 290, table);
 	//bresenhaml(3, 2, 15, 5, table);
 
 	//bresenhaml2(1, 17, 11, 29, table);
-	mlx_hook(table->winptr, 4, 0, mouse_press, table);
-	mlx_loop(table->mlxptr);
+	mlx_hook(fdfobj->winptr, 4, 0, mouse_press, fdfobj);
+	mlx_loop(fdfobj->mlxptr);
 
 	return (0);
 }
 
-// void	tabinit(t_tabla *table)
-// {
-
-// }
