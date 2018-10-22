@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:45:44 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/21 17:28:09 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/21 18:09:32 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 
 #include "libft.h"
 
-int		**parsefdf(const char *filepath)
+int		**parsefdf(const char *filepath, t_tabla *fdfobj)
 {
 	int			fd;
 	char		*line;
 	t_fdflines	*lista;
 	t_fdflines	*elem;
-	int			rows;
 	char		*buffer;
 
-	rows = 0;
 	buffer = ft_newstr(BUF_SIZE);
 	lista = NULL;
 	line = ft_strdup("");
@@ -35,12 +33,12 @@ int		**parsefdf(const char *filepath)
 		elem->line = line;
 		elem->next = NULL;
 		addtolist((void**)&lista, elem);
-		rows++;
+		fdfobj->gridht++;
 		line = ft_strdup("");
 	}
 	close(fd);
 	free(buffer);
-	return (rows != 0 ? makeintarr(lista, rows) : NULL);
+	return (fdfobj->gridht != 0 ? makeintarr(lista, fdfobj) : NULL);
 	// char **test;
 	// test = ft_split(lista->line);
 	// int i = 0;
@@ -70,19 +68,19 @@ void	addtolist(void **head, void *element)
 	tem->next = element;
 }
 
-int		**makeintarr(t_fdflines *lista, int rows)
+int		**makeintarr(t_fdflines *lista, t_tabla *fdfobj)
 {
 	int i;
 	int **tab;
 	char **tem;
 	int x;
 
-	i = 0;
 	x = 0;
-	if ((tab = malloc(sizeof(int*) * rows)) == NULL)
+	if ((tab = malloc(sizeof(int*) * fdfobj->gridht)) == NULL)
 		return (NULL);
 	while (lista)
 	{
+		i = 0;
 		tem = ft_split(lista->line);
 		while (tem[i])
 			i++;
@@ -91,6 +89,7 @@ int		**makeintarr(t_fdflines *lista, int rows)
 		i = -1;
 		while (tem[++i])
 			tab[x][i] = ft_atoi(tem[i]);
+		fdfobj->gridlen = i;
 		x++;
 		lista = lista->next;
 		free(tem);
