@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/23 18:46:47 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/24 16:20:31 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,16 @@
 
 # define BUF_SIZE 15
 # define MYT -3
-# define ENLARGE 20
+
+# define LGREEN 0x21FA90
+# define PINK 0xD138BF
+# define BLDBLUE 0x7494EA
+# define SCYAN 0x44CCFF
+# define SBLACK 0x494947
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FdF  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
-
+# define ENLARGE 15
 # define BPP 32
 # define WIDTH 600
 # define HEIGHT 600
@@ -69,8 +74,11 @@ typedef struct	s_tabla
 	int			bpp;
 	int			colortest;
 	int			**colors;
+	int			z;
 }				t_tabla;
 
+int				get_default_color(t_tabla *fdfobj, int z);
+void			insert_pixel(t_tabla *fdf, int x, int y, int color);
 void			generateimg(t_tabla *fdfobj);
 void			drawgrid(t_tabla *fdfobj);
 int				makeintarr(t_fdflines *lista, t_tabla *fdfobj);
@@ -198,7 +206,6 @@ typedef struct	s_strlist
 
 }				t_strlist;
 
-void			ft_memdel(void **ap);
 void			listadd(t_strlist **mainlist, t_strlist *newelem);
 t_strlist		*newlistelem(char const *inputstr, int start, int end);
 t_strlist		*ft_add_elem(void *data);
@@ -211,6 +218,10 @@ int				countdigits(long number, int base);
 int				myatoi_base(const char *str, int str_base);
 void			printhex(unsigned int x);
 
+/*
+** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> B_LIB & STUFF <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+*/
+void			ft_memdel(void **ap);
 void			ft_putnbr(int nb);
 void			ft_putstr(char *str);
 void			ft_putchar(char c);
