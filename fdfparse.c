@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:45:44 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/21 18:09:32 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/23 19:24:36 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "libft.h"
 
-int		**parsefdf(const char *filepath, t_tabla *fdfobj)
+int		parsefdf(const char *filepath, t_tabla *fdfobj)
 {
 	int			fd;
 	char		*line;
@@ -38,7 +38,7 @@ int		**parsefdf(const char *filepath, t_tabla *fdfobj)
 	}
 	close(fd);
 	free(buffer);
-	return (fdfobj->gridht != 0 ? makeintarr(lista, fdfobj) : NULL);
+	return (fdfobj->gridht != 0 ? makeintarr(lista, fdfobj) : -1);
 	// char **test;
 	// test = ft_split(lista->line);
 	// int i = 0;
@@ -68,31 +68,64 @@ void	addtolist(void **head, void *element)
 	tem->next = element;
 }
 
-int		**makeintarr(t_fdflines *lista, t_tabla *fdfobj)
+static void	free_strarr(char **arr)
 {
 	int i;
-	int **tab;
+
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free (arr);
+}
+
+static int	store_alt_color(char **strarr, t_tabla *fdfobj, int x, int length)
+{
+	int i;
+	char *tem;
+
+	i = 0;
+	tem = NULL;
+	if ((fdfobj->colors[x] = malloc(sizeof(int) * length)) == NULL)
+		return (-1);
+	while (strarr[i])
+	{
+		fdfobj->colors[x][i] = -1;
+		if ((tem = ft_strchr(strarr[i], ',')))
+		{
+			tem += 3;
+			fdfobj->colors[x][i] = myatoi_base(tem, 16);
+		}
+		fdfobj->grid[x][i] = ft_atoi(strarr[i]);
+		i++;
+	}
+	fdfobj->gridlen = i; // mozit da se stavit proverka za dali e isto so prethodnite
+	return (0);
+}
+
+int		makeintarr(t_fdflines *lista, t_tabla *fdfobj)
+{
+	int i;
 	char **tem;
 	int x;
 
 	x = 0;
-	if ((tab = malloc(sizeof(int*) * fdfobj->gridht)) == NULL)
-		return (NULL);
+	if ((fdfobj->grid = malloc(sizeof(int*) * fdfobj->gridht)) == NULL)
+		return (-1);
+	if ((fdfobj->colors = malloc(sizeof(int *) * fdfobj->gridht)) == NULL)
+		return (-1);
 	while (lista)
 	{
 		i = 0;
 		tem = ft_split(lista->line);
 		while (tem[i])
 			i++;
-		if ((tab[x] = malloc(sizeof(int) * i)) == NULL)
-			return (NULL);
-		i = -1;
-		while (tem[++i])
-			tab[x][i] = ft_atoi(tem[i]);
-		fdfobj->gridlen = i;
+		if ((fdfobj->grid[x] = malloc(sizeof(int) * i)) == NULL)
+			return (-1);
+		if (store_alt_color(tem, fdfobj, x, i))
+			return (-1);
 		x++;
 		lista = lista->next;
-		free(tem);
+		free_strarr(tem);
 	}
-	return (tab);
+	return (1);
 }

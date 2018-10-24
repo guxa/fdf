@@ -6,62 +6,65 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/10 17:10:19 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/17 22:21:25 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/21 00:08:49 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		getlinija(int filedesc, t_triler *filer)
+int		getlinija(int filedesc, char **line, char *buffer)
 {
 	char	*nl;
+	int		bred;
+	char	*temp;
+	static char *rest;
 
-	if (checkresto(filer))
+	if (checkresto(line, &rest))
 		return (1);
-	while ((filer->bred = read(filedesc, filer->buffer, BUF_SIZE)) > 0)
+	while ((bred = read(filedesc, buffer, BUF_SIZE)) > 0)
 	{
-		filer->buffer[filer->bred] = '\0';
-		if ((nl = ft_strchr(filer->buffer, '\n')))
+		buffer[bred] = '\0';
+		if ((nl = ft_strchr(buffer, '\n')))
 		{
-			filer->temp = filer->line;
+			temp = *line;
 			*nl = '\0';
-			filer->line = ft_joinstr(filer->line, filer->buffer);
-			filer->rest = ft_strdup(++nl);
-			free(filer->temp);
+			*line = ft_joinstr(*line, buffer);
+			rest = ft_strdup(++nl);
+			free(temp);
 			return (1);
 		}
-		else
-		{
-			filer->temp = filer->line;
-			filer->line = ft_joinstr(filer->line, filer->buffer);
-			free(filer->temp);
-		}
+		temp = *line;
+		*line = ft_joinstr(*line, buffer);
+		free(temp);
 	}
-	return (0);
+	rest = 0;
+	return (ft_strlen(*line) > 0 ? 1 : 0);
+	// ovde bese samo return (0); bez rest = 0, i drugava logika
 }
 
-int		checkresto(t_triler *filer)
+int		checkresto(char **line, char **rest)
 {
 	char *nl;
+	char *temp;
 
-	if (!filer->rest || filer->rest[0] == '\0')
+	if (!*rest || *rest[0] == '\0')
 	{
-		free(filer->rest);
+		free(*rest);
 		return (0);
 	}
-	if ((nl = ft_strchr(filer->rest, '\n')))
+	if ((nl = ft_strchr(*rest, '\n')))
 	{
 		*nl = '\0';
-		filer->temp = filer->line;
-		filer->line = ft_joinstr(filer->line, filer->rest);
-		free(filer->temp);
-		filer->temp = filer->rest;
-		filer->rest = ft_strdup(++nl);
-		free(filer->temp);
+		temp = *line;
+		*line = ft_joinstr(*line, *rest);
+		free(temp);
+		temp = *rest;
+		*rest = ft_strdup(++nl);
+		free(temp);
 		return (1);
 	}
-	free(filer->line);
-	filer->line = ft_strdup(filer->rest);
-	free(filer->rest);
+	free(*line);
+	*line = ft_strdup(*rest);
+	free(*rest);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/23 14:53:59 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/23 18:46:47 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,17 @@ typedef struct	s_tabla
 	int			endian;
 	int			bpp;
 	int			colortest;
+	int			**colors;
 }				t_tabla;
 
 void			generateimg(t_tabla *fdfobj);
 void			drawgrid(t_tabla *fdfobj);
-int				**makeintarr(t_fdflines *lista, t_tabla *fdfobj);
+int				makeintarr(t_fdflines *lista, t_tabla *fdfobj);
 char			**ft_split(char *str);
 void			addtolist(void **head, void *element);
 int				checkresto(char **line, char **rest);
 int				getlinija(int filedesc, char **line, char *buffer);
-int				**parsefdf(const char *filepath, t_tabla *fdfobj);
+int				parsefdf(const char *filepath, t_tabla *fdfobj);
 void			bresenhi(int x0, int y0, int x1, int y1, t_tabla *ta);
 void			breshandler(int x0, int y0, int x1, int y1, t_tabla *ta);
 int				mouse_press(int button, int x, int y, void *param);
