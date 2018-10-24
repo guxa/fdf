@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/21 16:32:02 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/23 14:53:59 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,14 @@
 
 # define BUF_SIZE 15
 # define MYT -3
-
+# define ENLARGE 20
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FdF  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
+
+# define BPP 32
+# define WIDTH 600
+# define HEIGHT 600
 
 typedef struct	s_fdflines
 {
@@ -52,15 +56,28 @@ typedef struct	s_tabla
 	void		*winptr;
 	int			mclicked;
 	int			**grid;
-	char		*buffer;
+	size_t		gridlen;
+	size_t		gridht;
+	int			**posx;
+	int			**posy;
+	int			offset;
+	int			test;
+	void		*img;
+	char		*data_add;
+	int			size_line;
+	int			endian;
+	int			bpp;
+	int			colortest;
 }				t_tabla;
 
-int				**makeintarr(t_fdflines *lista, int rows);
+void			generateimg(t_tabla *fdfobj);
+void			drawgrid(t_tabla *fdfobj);
+int				**makeintarr(t_fdflines *lista, t_tabla *fdfobj);
 char			**ft_split(char *str);
 void			addtolist(void **head, void *element);
 int				checkresto(char **line, char **rest);
 int				getlinija(int filedesc, char **line, char *buffer);
-int				**parsefdf(const char *filepath);
+int				**parsefdf(const char *filepath, t_tabla *fdfobj);
 void			bresenhi(int x0, int y0, int x1, int y1, t_tabla *ta);
 void			breshandler(int x0, int y0, int x1, int y1, t_tabla *ta);
 int				mouse_press(int button, int x, int y, void *param);

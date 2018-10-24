@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/19 17:25:07 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/21 16:04:55 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/23 17:07:02 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ void	breshandler(int x0, int y0, int x1, int y1, t_tabla *ta)
 	int resy;
 	int resx;
 
+	if (ta->test == 5)
+	{
+		x0 = x0 + 200;
+		y0 = y0 + 200;
+		x1 = x1 + 200;
+		y1 = y1 + 200;
+	}
 	if ((resy = y1 - y0) < 0)
 		resy = -resy;
 	if ((resx = x1 - x0) < 0)
@@ -39,6 +46,13 @@ void	breshandler(int x0, int y0, int x1, int y1, t_tabla *ta)
 		}
 }
 
+// static void	printpixel(int x, int y, t_tabla *fdf)
+// {
+// 	// x = (x * ENLARGE) + 150;
+// 	// y = (y * ENLARGE) + 150;
+// 	mlx_pixel_put(fdf->mlxptr, fdf->winptr, x, y, 0xFFFFFF);
+// }
+
 void	bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta)
 {
 	int dx;
@@ -56,7 +70,7 @@ void	bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta)
 	}
 	while (x0 <= x1)
 	{
-		mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xFFFFFF);
+		mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, ta->colortest);
 		//printf("%d %d\n", x0, y0);
 		x0++;
 		if (diff > 0)
@@ -85,8 +99,7 @@ void	bresenhi(int x0, int y0, int x1, int y1, t_tabla *ta)
 	}
 	while (y0 <= y1)
 	{
-		mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xFFFFFF);
-		//printf("%d %d\n", x0, y0);
+		mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, ta->colortest);
 		y0++;
 		if (diff > 0)
 		{
