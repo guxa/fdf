@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/24 16:20:31 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 01:23:51 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,24 @@
 # define BPP 32
 # define WIDTH 600
 # define HEIGHT 600
+# define FTABS(A) ((A) < 0 ? (-(A)) : (A))
 
 typedef struct	s_fdflines
 {
 	char				*line;
 	struct s_fdflines	*next;
 }				t_fdflines;
+
+typedef struct	s_cpixels
+{
+	int			startx;
+	int			endx;
+	int			starty;
+	int			endy;
+	int			end_color;
+	// int			cur_x;
+	// int			cur_y;
+}				t_cpixels;
 
 typedef struct	s_tabla
 {
@@ -63,8 +75,8 @@ typedef struct	s_tabla
 	int			**grid;
 	size_t		gridlen;
 	size_t		gridht;
-	int			**posx;
-	int			**posy;
+	int			**finalx;
+	int			**finaly;
 	int			offset;
 	int			test;
 	void		*img;
@@ -74,10 +86,14 @@ typedef struct	s_tabla
 	int			bpp;
 	int			colortest;
 	int			**colors;
-	int			z;
+	int			orgx;
+	int			orgy;
 }				t_tabla;
 
 int				get_default_color(t_tabla *fdfobj, int z);
+t_cpixels		swap_pixels(t_cpixels pix);
+int				get_color(t_tabla *fdfobj, t_cpixels pix, int cur_x, int cur_y);
+//int				get_default_color(t_tabla *fdfobj, int z);
 void			insert_pixel(t_tabla *fdf, int x, int y, int color);
 void			generateimg(t_tabla *fdfobj);
 void			drawgrid(t_tabla *fdfobj);
@@ -87,11 +103,11 @@ void			addtolist(void **head, void *element);
 int				checkresto(char **line, char **rest);
 int				getlinija(int filedesc, char **line, char *buffer);
 int				parsefdf(const char *filepath, t_tabla *fdfobj);
-void			bresenhi(int x0, int y0, int x1, int y1, t_tabla *ta);
-void			breshandler(int x0, int y0, int x1, int y1, t_tabla *ta);
+void			bresenhi(t_cpixels pix, t_tabla *ta);
+void			breshandler(t_cpixels pix, t_tabla *ta);
 int				mouse_press(int button, int x, int y, void *param);
-void			bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta);
-void			bresenhaml2(int x0, int y0, int x1, int y1, t_tabla *ta);
+void			bresenhaml(t_cpixels pix, t_tabla *ta);
+
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FILLER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */

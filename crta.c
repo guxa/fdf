@@ -6,128 +6,133 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/19 17:25:07 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/24 00:01:01 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 00:38:51 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// testirano bre i bre2, isto izgledet liniite
-
 #include "libft.h"
 
-void	breshandler(int x0, int y0, int x1, int y1, t_tabla *ta)
-{
-	int resy;
-	int resx;
+/*
+** breshandler handles the applying of Bresenham alg, according to the
+** gradient/slope because the org1 allowed to only draw lines with 
+** positive slope(x1 - x0 is longer than y1 - y0) - i.e. top left to down Right
+*/
 
-	if (ta->test == 5)
+void	breshandler(t_cpixels pix, t_tabla *ta)
+{
+	int deltay;
+	int deltax;
+
+	deltay = FTABS(pix.endy - pix.starty);// fabs from math.h can be used too,
+	deltax = FTABS(pix.endx - pix.startx);
+	if (deltay < deltax)
 	{
-		x0 += ta->offset;
-		y0 += ta->offset;
-		x1 += ta->offset;
-		y1 += ta->offset;
-	}
-	if ((resy = y1 - y0) < 0)
-		resy = -resy;
-	if ((resx = x1 - x0) < 0)
-		resx = -resx;
-	if (resy < resx)
-	{
-		if (x0 > x1)
-			bresenhaml(x1, y1, x0, y0, ta);
+		if (pix.startx > pix.endx)
+			bresenhaml(swap_pixels(pix), ta);
 		else
-			bresenhaml(x0, y0, x1, y1, ta);
+			bresenhaml(pix, ta);
 	}
 	else
 		{
-			if (y0 > y1)
-				bresenhi(x1, y1, x0, y0, ta);
+			if (pix.starty > pix.endy)
+				bresenhi(swap_pixels(pix), ta);
 			else
-				bresenhi(x0, y0, x1, y1, ta);
+				bresenhi(pix, ta);
 		}
 }
 
-void	bresenhaml(int x0, int y0, int x1, int y1, t_tabla *ta)
+void	bresenhaml(t_cpixels pix, t_tabla *ta)
 {
 	int dx;
 	int dy;
 	int diff;
 	int yi;
 
-	dx = x1 - x0;
-	dy = y1 - y0;
+	dx = pix.endx - pix.startx;
+	dy = pix.endy - pix.starty;
 	diff = 2 * dy - dx;
 	if ((yi = 1) && dy < 0)
 	{
 		dy = -dy;
 		yi = -1;
 	}
-	while (x0 <= x1)
+	while (pix.startx <= pix.endx)
 	{
-		//mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, ta->colortest);
-		printpixel(ta, x0, y0, get_default_color(ta, ta->z));
-		x0++;
+		//mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xEF8633);
+		insert_pixel(ta, pix.startx, pix.starty,
+					get_color(ta, pix, pix.startx, pix.starty));
+		pix.startx++;
 		if (diff > 0)
 		{
-			y0 += yi;
+			pix.starty += yi;
 			diff = diff - 2 * dx;
 		}
 		diff = diff + 2 * dy;
 	}
 }
 
-void	bresenhi(int x0, int y0, int x1, int y1, t_tabla *ta)
+void	bresenhi(t_cpixels pix, t_tabla *ta)
 {
 	int dx;
 	int dy;
 	int diff;
 	int xi;
 
-	dx = x1 - x0;
-	dy = y1 - y0;
+	dx = pix.endx - pix.startx;
+	dy = pix.endy - pix.starty;
 	diff = 2 * dy - dx;
 	if ((xi = 1) && dx < 0)
 	{
 		dx = -dx;
 		xi = -1;
 	}
-	while (y0 <= y1)
+	while (pix.starty <= pix.endy)
 	{
-		//mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, ta->colortest);
-		printpixel(ta, x0, y0, get_default_color(ta, ta->z));
-		y0++;
+		//mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xEF8633);
+		insert_pixel(ta, pix.startx, pix.starty,
+					get_color(ta, pix, pix.startx, pix.starty));
+		pix.starty++;
 		if (diff > 0)
 		{
-			x0 += xi;
+			pix.startx += xi;
 			diff = diff - 2 * dy;
 		}
 		diff = diff + 2 * dx;
 	}
 }
 
-// D = 2 * dy - (dx - 1) - (2 * dy - dx);
-// D = 2 * dy - dx + 1 - 2 * dy + dx == +1
+t_cpixels swap_pixels(t_cpixels pix)
+{
+	int tem;
 
-//// D = 2 * (dy - 1) - dx + 1 -2dy +dx == -2 -dx + 1 +dx = -1
-// void	bresenhaml2(int x0, int y0, int x1, int y1, t_tabla *ta)
+	tem = pix.startx;
+	pix.startx = pix.endx;
+	pix.endx = tem;
+	tem = pix.starty;
+	pix.starty = pix.endy;
+	pix.endy = tem;
+	return (pix);
+}
+
+// void	24okt(23i00)-breshandler(int x0, int y0, int x1, int y1, t_tabla *ta)
 // {
-// 	int dx;
-// 	int dy;
-// 	int diff;
+// 	int deltay;
+// 	int deltax;
 
-// 	dx = x1 - x0;
-// 	dy = y1 - y0;
-// 	diff = 2 * dy - dx;
-// 	while (x0 <= x1)
+// 	deltay = FTABS(y1 - y0); // fabs from math.h can be used too,
+// 	deltax = FTABS(x1 - x0);
+// 	if (deltay < deltax)
 // 	{
-// 		mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xFFFFFF);
-// 		//printf("%d %d\n", x0, y0);
-// 		x0++;
-// 		if (diff < 0)
-// 			diff = diff + 2 * dy;
+// 		if (x0 > x1)
+// 			bresenhaml(x1, y1, x0, y0, ta);
 // 		else
-// 		{
-// 			y0++;
-// 			diff = diff + 2 * (dy - dx);
-// 		}
+// 			bresenhaml(x0, y0, x1, y1, ta);
 // 	}
+// 	else
+// 		{
+// 			if (y0 > y1)
+// 				bresenhi(x1, y1, x0, y0, ta);
+// 			else
+// 				bresenhi(x0, y0, x1, y1, ta);
+// 		}
 // }

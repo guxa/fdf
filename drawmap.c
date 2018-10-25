@@ -6,30 +6,17 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 17:33:03 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/23 17:12:20 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 01:15:38 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void iso(int x, int y, t_tabla *fdfobj)
-{
-	int z;
-
-	z = fdfobj->grid[y][x] * 10;
-	fdfobj->posx[y][x] = (x - y) * cos(0.523599) * ENLARGE; //cos(3.14159 / 6);
-	fdfobj->posy[y][x] = -z + (x + y) * sin(0.523599) * ENLARGE; // sin(3.14159 / 6);
-	// if (z == 0)
-	// {
-		// fdfobj->posx[y][x] = x;
-		// fdfobj->posy[y][x] = y;
-	// }
-}
-
 void	getisocord(t_tabla *fdfobj)
 {
 	int x;
 	int y;
+	int z;
 
 	x = 0;
 	y = 0;
@@ -37,7 +24,15 @@ void	getisocord(t_tabla *fdfobj)
 	{
 		while (x < (int)fdfobj->gridlen)
 		{
-			iso(x, y, fdfobj);
+			z = fdfobj->grid[y][x] * ENLARGE; //ova za pogolema visina
+			fdfobj->finalx[y][x] = (x - y) * cos(0.523599) * ENLARGE;
+			fdfobj->finaly[y][x] = -z + (x + y) * sin(0.523599) * ENLARGE;
+			// fdfobj->finaly[y][x] *= 15;
+			// fdfobj->finalx[y][x] *= 15;
+			while (fdfobj->finaly[y][x] + fdfobj->offset < 30)
+				fdfobj->offset += 10;
+			if (fdfobj->grid[y][x] > fdfobj->test) // ova za proba e, trebit nekako da gi zemame najvisokite i najniskite
+				fdfobj->test = fdfobj->grid[y][x];
 			x++;
 		}
 		y++;
@@ -45,28 +40,45 @@ void	getisocord(t_tabla *fdfobj)
 	}
 }
 
-void	draw_horiz_lines(t_tabla *fdfobj, int x , int y)
+void	draw_horiz_lines(t_tabla *fdf, int x , int y)
 {
-	fdfobj->colortest = 0xFFFFFF;
-	if (x + 1 < (int)fdfobj->gridlen)
+	t_cpixels pixels;
+
+	if (x + 1 < (int)fdf->gridlen)
 	{
-		breshandler(fdfobj->posx[y][x], fdfobj->posy[y][x],
-		fdfobj->posx[y][x + 1], fdfobj->posy[y][x + 1], fdfobj);
-		// color begin
-		// color end sranja
+		pixels.startx = fdf->finalx[y][x] + fdf->offset;
+		pixels.starty = fdf->finaly[y][x] + fdf->offset;
+		pixels.endx = fdf->finalx[y][x + 1] + fdf->offset;
+		pixels.endy = fdf->finaly[y][x + 1] + fdf->offset;
+
+		pixels.end_color =  (fdf->colors[y][x + 1] != -1 ? 
+			fdf->colors[y][x + 1] : get_default_color(fdf, fdf->grid[y][x + 1]));
+		breshandler(pixels, fdf);
+		// breshandler(fdf->finalx[y][x] + fdf->offset,
+		// fdf->finaly[y][x] + fdf->offset, fdf->finalx[y][x + 1] + fdf->offset,
+		// fdf->finaly[y][x + 1] + fdf->offset, fdf);
 	}
 
 }
 
-void	draw_vert_lines(t_tabla *fdfobj, int x , int y)
+void	draw_vert_lines(t_tabla *fdf, int x , int y)
 {
-	fdfobj->colortest = 0xFFFFFF;
-	if (y + 1 < (int)fdfobj->gridht)
+	t_cpixels pixels;
+
+	//fdf->colortest = 0xEF8633;
+	if (y + 1 < (int)fdf->gridht)
 	{
-		breshandler(fdfobj->posx[y][x], fdfobj->posy[y][x],
-		fdfobj->posx[y + 1][x], fdfobj->posy[y + 1][x], fdfobj);
-		// color begin
-		// color end sranja
+		pixels.startx = fdf->finalx[y][x] + fdf->offset;
+		pixels.starty = fdf->finaly[y][x] + fdf->offset;
+		pixels.endx = fdf->finalx[y + 1][x] + fdf->offset;
+		pixels.endy = fdf->finaly[y + 1][x] + fdf->offset;
+
+		pixels.end_color =  (fdf->colors[y + 1][x] != -1 ? 
+			fdf->colors[y + 1][x] : get_default_color(fdf, fdf->grid[y + 1][x]));
+		breshandler(pixels, fdf);
+		// breshandler(fdf->finalx[y][x] + fdf->offset,
+		// fdf->finaly[y][x] + fdf->offset, fdf->finalx[y + 1][x] + fdf->offset,
+		// fdf->finaly[y + 1][x] + fdf->offset, fdf);
 	}
 
 }
@@ -79,21 +91,17 @@ void	drawgrid(t_tabla *fdfobj)
 	x = 0;
 	y = 0;
 	getisocord(fdfobj);
-	fdfobj->test = 5;  //ova da se izbrisit
 	while (y < fdfobj->gridht)
 	{
-		//breshandler(x + 50, y * i, fdfobj->gridlen + 50, y * i, fdfobj);
+		fdfobj->orgy = y;
 		while (x < fdfobj->gridlen)
 		{
+			fdfobj->orgx = x;
 			draw_horiz_lines(fdfobj, x, y);
 			draw_vert_lines(fdfobj, x , y);
 			x++;
 		}
-
 		x = 0;
 		y++;
 	}
 }
-
-//breshandler(x * SP + 10, y * SP + SP, (x + 1) * SP + 10, y * SP + SP, fdfobj);
-//breshandler(x * SP + 10, y * SP + SP, x * SP + 10, (y + 1) * SP + SP, fdfobj);

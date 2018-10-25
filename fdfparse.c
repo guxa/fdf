@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:45:44 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/23 19:24:36 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/23 21:23:24 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,6 @@ int		parsefdf(const char *filepath, t_tabla *fdfobj)
 	close(fd);
 	free(buffer);
 	return (fdfobj->gridht != 0 ? makeintarr(lista, fdfobj) : -1);
-	// char **test;
-	// test = ft_split(lista->line);
-	// int i = 0;
-	// while (test[i])
-	// 	printf("%s\n", test[i++]);
-	// while (lista)
-	// {
-	// 	printf("%s %d\n", lista->line, BUF_SIZE);
-	// 	lista = lista->next;
-	// }
 }
 
 void	addtolist(void **head, void *element)
