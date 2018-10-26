@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:45:44 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/23 21:23:24 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 23:31:54 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ static int	store_alt_color(char **strarr, t_tabla *fdfobj, int x, int length)
 			fdfobj->colors[x][i] = myatoi_base(tem, 16);
 		}
 		fdfobj->grid[x][i] = ft_atoi(strarr[i]);
+		if (fdfobj->grid[x][i] > fdfobj->maxz) // trebit nekako da gi zemame najvisokite i najniskite
+			fdfobj->maxz = fdfobj->grid[x][i];
 		i++;
 	}
 	fdfobj->gridlen = i; // mozit da se stavit proverka za dali e isto so prethodnite

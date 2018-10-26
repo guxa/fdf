@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 23:22:27 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 01:24:28 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 23:31:54 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int	get_default_color(t_tabla *fdfobj, int z)
 {
 	double	percentage;
 
-	percentage = percent(0, fdfobj->test, z); // ova colortest trebit da e max Z 
+	percentage = percent(0, fdfobj->maxz, z); // ova colortest trebit da e max Z 
 	if (percentage < 0.2)
 		return (BLDBLUE);
 	else if (percentage < 0.4)
 		return (SCYAN);
 	else if (percentage < 0.6)
-		return (SCYAN);
+		return (LGREEN);
 	else if (percentage < 0.8)
 		return (LGREEN);
 	else
@@ -65,23 +65,24 @@ int		get_color(t_tabla *fdfobj, t_cpixels pix, int cur_x, int cur_y)
 	double	percentage;
 	int 	x;
 	int		y;
-	//int 	endcolor;
+	int		red, green, blue;
 
 	x = fdfobj->orgx;
 	y = fdfobj->orgy;
-	currentcol = (fdfobj->colors[y][x] != -1 ? 
-				fdfobj->colors[y][x] : get_default_color(fdfobj, fdfobj->grid[y][x]));
-	
+	currentcol = (fdfobj->colors[y][x] != -1 ? fdfobj->colors[y][x] :
+				get_default_color(fdfobj, fdfobj->grid[y][x]));
+	// if (currentcol == pix.end_color) //not sure about this
+	// 	return (currentcol);
 	if (FTABS(pix.endx - pix.startx) > FTABS(pix.endy - pix.starty))
 		percentage = percent(pix.startx, pix.endx, cur_x);
 	else
 		percentage = percent(pix.starty, pix.endy, cur_y);
 
+	red = (1 - percentage) * ((currentcol >> 16) & 0xFF) + (percentage * ((pix.end_color >> 16) & 0xFF));
+	green = (1 - percentage) * ((currentcol >> 8) & 0xFF) + (percentage * ((pix.end_color >> 8) & 0xFF));
+	blue = (1 - percentage) * (currentcol & 0xFF) + (percentage * (pix.end_color & 0xFF));
 
-
-	// currentcol = percentage * get_default_color(fdfobj, fdfobj->grid[y][x])
-	// 			+ (percentage - 1) * pix.end_color;
-	
+	currentcol = ((red << 16) | (green << 8) | blue);
 	return (currentcol);
 
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/19 17:25:07 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 00:38:51 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 18:35:45 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,15 @@ void	bresenhaml(t_cpixels pix, t_tabla *ta)
 		dy = -dy;
 		yi = -1;
 	}
-	while (pix.startx <= pix.endx)
+	while (pix.cur_x <= pix.endx)
 	{
 		//mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xEF8633);
-		insert_pixel(ta, pix.startx, pix.starty,
-					get_color(ta, pix, pix.startx, pix.starty));
-		pix.startx++;
+		insert_pixel(ta, pix.cur_x, pix.cur_y,
+					get_color(ta, pix, pix.cur_x, pix.cur_y));
+		pix.cur_x++;
 		if (diff > 0)
 		{
-			pix.starty += yi;
+			pix.cur_y += yi;
 			diff = diff - 2 * dx;
 		}
 		diff = diff + 2 * dy;
@@ -86,21 +86,25 @@ void	bresenhi(t_cpixels pix, t_tabla *ta)
 		dx = -dx;
 		xi = -1;
 	}
-	while (pix.starty <= pix.endy)
+	while (pix.cur_y <= pix.endy)
 	{
 		//mlx_pixel_put(ta->mlxptr, ta->winptr, x0, y0, 0xEF8633);
-		insert_pixel(ta, pix.startx, pix.starty,
-					get_color(ta, pix, pix.startx, pix.starty));
-		pix.starty++;
+		insert_pixel(ta, pix.cur_x, pix.cur_y,
+					get_color(ta, pix, pix.cur_x, pix.cur_y));
+		pix.cur_y++;
 		if (diff > 0)
 		{
-			pix.startx += xi;
+			pix.cur_x += xi;
 			diff = diff - 2 * dy;
 		}
 		diff = diff + 2 * dx;
 	}
 }
 
+/*
+** A complete solution would need to detect whether x1 > x0 or y1 > y0 and 
+** reverse the input coordinates before drawing, thus
+*/
 t_cpixels swap_pixels(t_cpixels pix)
 {
 	int tem;
@@ -111,6 +115,8 @@ t_cpixels swap_pixels(t_cpixels pix)
 	tem = pix.starty;
 	pix.starty = pix.endy;
 	pix.endy = tem;
+	pix.cur_x = pix.startx;
+	pix.cur_y = pix.starty;
 	return (pix);
 }
 

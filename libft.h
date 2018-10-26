@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 01:23:51 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/25 23:32:04 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,19 @@
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FdF  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
-# define ENLARGE 15
+# define ENLARGE 20
 # define BPP 32
-# define WIDTH 600
-# define HEIGHT 600
+# define WIDTH 1000
+# define HEIGHT 1000
+# define MENU 160
 # define FTABS(A) ((A) < 0 ? (-(A)) : (A))
 
-typedef struct	s_fdflines
+typedef struct	s_view
 {
-	char				*line;
-	struct s_fdflines	*next;
-}				t_fdflines;
+	int			zoom;
+	int			offset;
+	int			xoffset;
+}				t_view;
 
 typedef struct	s_cpixels
 {
@@ -62,9 +64,9 @@ typedef struct	s_cpixels
 	int			endx;
 	int			starty;
 	int			endy;
+	int			cur_x;
+	int			cur_y;
 	int			end_color;
-	// int			cur_x;
-	// int			cur_y;
 }				t_cpixels;
 
 typedef struct	s_tabla
@@ -77,8 +79,7 @@ typedef struct	s_tabla
 	size_t		gridht;
 	int			**finalx;
 	int			**finaly;
-	int			offset;
-	int			test;
+	int			maxz;
 	void		*img;
 	char		*data_add;
 	int			size_line;
@@ -90,13 +91,19 @@ typedef struct	s_tabla
 	int			orgy;
 }				t_tabla;
 
+typedef struct	s_fdflines
+{
+	char				*line;
+	struct s_fdflines	*next;
+}				t_fdflines;
+
 int				get_default_color(t_tabla *fdfobj, int z);
 t_cpixels		swap_pixels(t_cpixels pix);
 int				get_color(t_tabla *fdfobj, t_cpixels pix, int cur_x, int cur_y);
 //int				get_default_color(t_tabla *fdfobj, int z);
 void			insert_pixel(t_tabla *fdf, int x, int y, int color);
 void			generateimg(t_tabla *fdfobj);
-void			drawgrid(t_tabla *fdfobj);
+void			drawgrid(t_tabla *fdfobj, t_view *view);
 int				makeintarr(t_fdflines *lista, t_tabla *fdfobj);
 char			**ft_split(char *str);
 void			addtolist(void **head, void *element);
