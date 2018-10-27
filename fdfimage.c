@@ -6,25 +6,38 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 23:34:15 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/26 21:41:07 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 00:56:05 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		img_background(t_tabla *fdfobj)
+void	insert_pixel(t_tabla *fdf, int x, int y, int color)
 {
 	int i;
 
-	i = 0;
-	while (i < WIDTH * HEIGHT)
+	if (x > MENU && x < WIDTH && y > 0 && y < HEIGHT)
 	{
-		//  im[i] = ...
-		//((int*)(fdfobj->data_add))[i] = (i < WIDTH * HEIGHT / 2 ? 0x222222 : 0x000000););
-		((int*)(fdfobj->data_add))[i] = (i % WIDTH <= MENU ? 0x222222 : 0x000000); //0x9A1F6A
-		i++;
+		i = (x * fdf->bpp / 8) + (y * fdf->size_line);
+		fdf->data_add[i] = color;
+		fdf->data_add[++i] = color >> 8;
+		fdf->data_add[++i] = color >> 16;
 	}
 }
+
+// static void		img_background(t_tabla *fdfobj)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while (i < WIDTH * HEIGHT)
+// 	{
+// 		//  im[i] = ...
+// 		//((int*)(fdfobj->data_add))[i] = (i < WIDTH * HEIGHT / 2 ? 0x222222 : 0x000000););
+// 		((int*)(fdfobj->data_add))[i] = (i % WIDTH <= MENU ? 0x222222 : 0x000000); //0x9A1F6A
+// 		i++;
+// 	}
+// }
 /*
 ** vo odnos na zumot, standardno se mestit sirina na ekran / sirina na mapa / 2
 ** posle kaj while loopot, provervit dali najvisokata tocka * zum + offset ke e
@@ -39,14 +52,18 @@ t_view		*init_view(int gridlen, int gridht, int highest_alt)
 	uview->zoom = (WIDTH / gridlen <= HEIGHT / gridht ?
 					(WIDTH - MENU) / gridlen / 2 : HEIGHT / gridht / 2);
 	uview->zoom = (uview->zoom == 0 ? 1 : uview->zoom);
-	uview->offset = (HEIGHT + gridht * uview->zoom) / 2; // (HEIGHT + fdfobj->gridht * view->zoom)
+	uview->offset = (HEIGHT + gridht * uview->zoom) / 2;
 	uview->xoffset = WIDTH / 2;
 	while (-(highest_alt * uview->zoom) + uview->offset < 0)
 		uview->zoom -= 1;
 	uview->alpha = 0;
 	uview->beta = 0;
 	uview->gamma = 0;
-	//uview->zoom = (uview->zoom <= 0 ? 1 : uview->zoom);
+	uview->projection = 'i';
+	uview->zoom = (uview->zoom <= 0 ? 1 : uview->zoom);
+	uview->z_multiplier = 1;
+	while ((gridht - 1) * uview->zoom + uview->offset > HEIGHT)
+		uview->offset -= 30;
 	return (uview);
 }
 
@@ -61,14 +78,18 @@ static void		print_menu(t_tabla *fdfobj)
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Mouse Scroll");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Or Numpad + -");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 50), LGREEN, "Rotate:");
-	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Press mouse & move");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Left click & move");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Or Numpad:");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 20), SCYAN, "2/8 | 4/6 | 1/9");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 50), LGREEN, "Move:");
-	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "ARROW UP");
-	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "ARROW DOWN");
-	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "ARROW LEFT");
-	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "ARROW RIGHT");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "ARROWS: UP DOWN");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "LEFT RIGHT");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 50), LGREEN, "Change altitude:");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "A -> Increase");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "S -> Decrease");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 50), LGREEN, "Change projection:");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "P -> Parallel");
+	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "I -> Isometric");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 50), LGREEN, "<>Exit:");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "ESCAPE");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Close window");
@@ -76,26 +97,22 @@ static void		print_menu(t_tabla *fdfobj)
 
 void			generateimg(t_tabla *fdfobj)
 {
-	// t_view *uview;
+	int i;
 
-	// uview = init_view(fdfobj->gridlen, fdfobj->gridht, fdfobj->maxz);
-	img_background(fdfobj);
+	i = 0;
+	while (i < WIDTH * HEIGHT)
+	{
+		// if (i % WIDTH <= MENU && i < (HEIGHT / 5 * 3) * WIDTH)
+		// 	((int*)(fdfobj->data_add))[i] = 0x0A0C16; // E5C1BD soft pink // 0x041B15
+		// else
+			((int*)(fdfobj->data_add))[i] = (i % WIDTH <= MENU ? 0x0A0C16 : 0x000000);
+		//((int*)(fdfobj->data_add))[i] = (i % WIDTH <= MENU ? 0x222222 : 0x000000); //0x9A1F6A
+		i++;
+	}
+	//img_background(fdfobj);
 	drawgrid(fdfobj, fdfobj->view);
 	mlx_put_image_to_window(fdfobj->mlxptr, fdfobj->winptr, fdfobj->img, 0, 0);
 	print_menu(fdfobj);
-}
-
-void	insert_pixel(t_tabla *fdf, int x, int y, int color)
-{
-	int i;
-
-	if (x > MENU && x < WIDTH && y > 0 && y < HEIGHT)
-	{
-		i = (x * fdf->bpp / 8) + (y * fdf->size_line);
-		fdf->data_add[i] = color;
-		fdf->data_add[++i] = color >> 8;
-		fdf->data_add[++i] = color >> 16;
-	}
 }
 
 // while (j < (mlx->bpp / 8))

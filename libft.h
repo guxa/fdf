@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/26 21:30:28 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 01:10:25 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@
 # define PINK 0xD138BF
 # define BLDBLUE 0x7494EA
 # define SCYAN 0x44CCFF
-# define SBLACK 0x494947
+# define SBLACK 0xE5C1BD//0x494947
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FdF  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
 # define ENLARGE 20
 # define BPP 32
-# define WIDTH 1000
+# define WIDTH 1200
 # define HEIGHT 1000
-# define MENU 200
+# define MENU (WIDTH / 5)
 # define FTABS(A) ((A) < 0 ? (-(A)) : (A))
 
 typedef struct	s_view
@@ -61,6 +61,8 @@ typedef struct	s_view
 	double		gamma;
 	int			mouse_lastx;
 	int			mouse_lasty;
+	char		projection;
+	double		z_multiplier;
 }				t_view;
 
 typedef struct	s_cpixels
@@ -72,6 +74,7 @@ typedef struct	s_cpixels
 	int			cur_x;
 	int			cur_y;
 	int			end_color;
+	int			st_color;
 }				t_cpixels;
 
 typedef struct	s_tabla
@@ -102,11 +105,13 @@ typedef struct	s_fdflines
 	struct s_fdflines	*next;
 }				t_fdflines;
 
+void			change_altitude(int keycode, t_tabla *fdfobj);
+void			paralelprojection(t_tabla *fdfobj);
 int				close_app(void *param);
 int				mouse_release(int button, int x, int y, void *param);
 int				mouse_move(int x, int y, void *param);
 void			rotate(int key, t_tabla *fdfobj);
-void			getisocord(t_tabla *fdfobj, t_view *view);
+void			isoprojection(t_tabla *fdfobj);
 void			zoom(int keycode, t_tabla *fdfobj);
 void			move(int keycode, t_tabla *fdfobj);
 t_view			*init_view(int gridlen, int gridht, int highest_alt);

@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 18:15:56 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/26 18:16:07 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 00:08:14 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,14 @@ void	zoom(int keycode, t_tabla *fdfobj)
 		fdfobj->view->zoom--;
 	if (fdfobj->view->zoom < 1)
 		fdfobj->view->zoom = 1;
+	generateimg(fdfobj);
+}
+
+void	change_altitude(int keycode, t_tabla *fdfobj)
+{
+	if (keycode == KEYBOARD_A)
+		fdfobj->view->z_multiplier += 0.1;
+	else
+		fdfobj->view->z_multiplier -= 0.1;
 	generateimg(fdfobj);
 }

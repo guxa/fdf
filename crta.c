@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/19 17:25:07 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 18:35:45 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 02:39:19 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@ t_cpixels swap_pixels(t_cpixels pix)
 	pix.endy = tem;
 	pix.cur_x = pix.startx;
 	pix.cur_y = pix.starty;
+	tem = pix.st_color;
+	pix.st_color = pix.end_color;
+	pix.end_color = tem;
 	return (pix);
 }
 

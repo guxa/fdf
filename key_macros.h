@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 00:08:02 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/26 21:53:25 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/26 23:53:59 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,10 @@
 # define NUM_PAD_MINUS		78
 
 # define ESCAPE				53
-# define MAIN_PAD_I			34
-# define MAIN_PAD_P			35
-# define MAIN_PAD_PLUS		24
-# define MAIN_PAD_MINUS		27
-# define MAIN_PAD_LESS		43
-# define MAIN_PAD_MORE		47
+# define KEYBOARD_A			0
+# define KEYBOARD_S			1
+# define KEYBOARD_I			34
+# define KEYBOARD_P			35
+
 
 #endif

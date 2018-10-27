@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 02:04:40 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/26 17:09:13 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 00:04:18 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	rotatex(double alpha, int *y, int *z)
 	prev_y = *y;
 	*y = *y * cos(alpha) + *z * sin(alpha);
 	*z = -prev_y * sin(alpha) + *z * cos(alpha);
-
 }
 
 void	rotatey(double beta, int *x, int *z)
@@ -41,7 +40,6 @@ void	rotatez(double gamma, int *x, int *y)
 	prev_x = *x;
 	*x = *x * cos(gamma) - *y * sin(gamma);
 	*y = prev_x * sin(gamma) + prev_y * cos(gamma);
-	
 }
 
 void	rotate(int key, t_tabla *fdfobj)
@@ -61,7 +59,7 @@ void	rotate(int key, t_tabla *fdfobj)
 	generateimg(fdfobj);
 }
 
-void	getisocord(t_tabla *fdfobj, t_view *view)
+void	isoprojection(t_tabla *fdfobj)
 {
 	int x;
 	int y;
@@ -75,16 +73,14 @@ void	getisocord(t_tabla *fdfobj, t_view *view)
 	{
 		while (x < (int)fdfobj->gridlen)
 		{
-			temx = x * view->zoom;
-			temy = y * view->zoom;
-			z = fdfobj->grid[y][x] * view->zoom; //ova za pogolema visina
-			rotatex(view->alpha, &temy, &z);
-			rotatey(view->beta, &temx, &z);
-			rotatez(view->gamma, &temx, &temy);
-			fdfobj->finalx[y][x] = (temx - temy) * cos(0.523599);// * ENLARGE;
-			fdfobj->finaly[y][x] = -z + (temx + temy) * sin(0.523599);// * ENLARGE;
-			while (fdfobj->finaly[y][x] + view->offset > HEIGHT) // problem mi prajt ova ko ke zumiram ne me ostavat da se vratam gore
-				view->offset -= 30;
+			temx = x * fdfobj->view->zoom;
+			temy = y * fdfobj->view->zoom;
+			z = fdfobj->grid[y][x] * fdfobj->view->zoom * fdfobj->view->z_multiplier; //ova za pogolema visina
+			rotatex(fdfobj->view->alpha, &temy, &z);
+			rotatey(fdfobj->view->beta, &temx, &z);
+			rotatez(fdfobj->view->gamma, &temx, &temy);
+			fdfobj->finalx[y][x] = (temx - temy) * cos(0.523599);
+			fdfobj->finaly[y][x] = -z + (temx + temy) * sin(0.523599);
 			x++;
 		}
 		y++;
@@ -92,5 +88,28 @@ void	getisocord(t_tabla *fdfobj, t_view *view)
 	}
 }
 
-		// while (fdfobj->finalx[y][x] + view->xoffset < 30)
-		// 	view->xoffset += 10;
+void	paralelprojection(t_tabla *fdfobj)
+{
+	int x;
+	int y;
+	int z;
+
+	x = 0;
+	y = 0;
+	while (y < (int)fdfobj->gridht)
+	{
+		while (x < (int)fdfobj->gridlen)
+		{
+			z = fdfobj->grid[y][x] * fdfobj->view->zoom; //ova za pogolema visina
+
+			fdfobj->finalx[y][x] = x * fdfobj->view->zoom;// * ENLARGE;
+			fdfobj->finaly[y][x] = y * fdfobj->view->zoom;// * ENLARGE;
+			rotatex(fdfobj->view->alpha, &(fdfobj->finaly[y][x]), &z);
+			rotatey(fdfobj->view->beta, &(fdfobj->finalx[y][x]), &z);
+			rotatez(fdfobj->view->gamma, &(fdfobj->finalx[y][x]), &(fdfobj->finaly[y][x]));
+			x++;
+		}
+		y++;
+		x = 0;
+	}
+}
