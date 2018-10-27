@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 23:50:57 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 23:31:54 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/26 18:47:29 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	tabinit(t_tabla *table)
 {
 	table->mlxptr = mlx_init();
-	table->winptr = mlx_new_window(table->mlxptr, WIDTH, HEIGHT, "Proba");
+	table->winptr = mlx_new_window(table->mlxptr, WIDTH, HEIGHT, "FdF j.g.");
 	table->mclicked = 0;
 	table->grid = NULL;
 	table->gridlen = 0;
@@ -26,10 +26,10 @@ void	tabinit(t_tabla *table)
 	table->img = mlx_new_image(table->mlxptr, WIDTH, HEIGHT);
 	table->data_add = mlx_get_data_addr(table->img, &(table->bpp), &(table->size_line)
 		, &(table->endian));
-	table->colortest = -1;
 	table->colors = NULL;
 	table->orgx = 0;
 	table->orgy = 0;
+	table->view = NULL;
 }
 
 int		initxyarr(t_tabla *fdfobj)
@@ -65,12 +65,14 @@ int main(int argc, char **argv)
 	if (initxyarr(fdfobj) != 0)
 		return (-1);
 	
-	//printf("%d\n", fdfobj->colors[2][2]);
-		//breshandler(0, 0, 15, 9, fdfobj);
-	//drawgrid(fdfobj);
-	fdfobj->winptr = mlx_new_window(fdfobj->mlxptr, WIDTH, HEIGHT, "IMG Proba");
+	fdfobj->view = init_view(fdfobj->gridlen, fdfobj->gridht, fdfobj->maxz);
+
 	generateimg(fdfobj);
-	//mlx_hook(fdfobj->winptr, 4, 0, mouse_press, fdfobj);
+	mlx_hook(fdfobj->winptr, 4, 0, mouse_press, fdfobj);
+	mlx_hook(fdfobj->winptr, 6, 0, mouse_move, fdfobj);
+	mlx_hook(fdfobj->winptr, 5, 0, mouse_release, fdfobj);
+	mlx_hook(fdfobj->winptr, 2, 0, key_press, fdfobj);
+	mlx_hook(fdfobj->winptr, 17, 0, close_app, fdfobj);
 	mlx_loop(fdfobj->mlxptr);
 
 	return (0);

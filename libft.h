@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 23:32:04 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/26 21:30:28 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 # define BPP 32
 # define WIDTH 1000
 # define HEIGHT 1000
-# define MENU 160
+# define MENU 200
 # define FTABS(A) ((A) < 0 ? (-(A)) : (A))
 
 typedef struct	s_view
@@ -56,6 +56,11 @@ typedef struct	s_view
 	int			zoom;
 	int			offset;
 	int			xoffset;
+	double		alpha;
+	double		beta;
+	double		gamma;
+	int			mouse_lastx;
+	int			mouse_lasty;
 }				t_view;
 
 typedef struct	s_cpixels
@@ -85,10 +90,10 @@ typedef struct	s_tabla
 	int			size_line;
 	int			endian;
 	int			bpp;
-	int			colortest;
 	int			**colors;
 	int			orgx;
 	int			orgy;
+	t_view		*view;
 }				t_tabla;
 
 typedef struct	s_fdflines
@@ -97,6 +102,15 @@ typedef struct	s_fdflines
 	struct s_fdflines	*next;
 }				t_fdflines;
 
+int				close_app(void *param);
+int				mouse_release(int button, int x, int y, void *param);
+int				mouse_move(int x, int y, void *param);
+void			rotate(int key, t_tabla *fdfobj);
+void			getisocord(t_tabla *fdfobj, t_view *view);
+void			zoom(int keycode, t_tabla *fdfobj);
+void			move(int keycode, t_tabla *fdfobj);
+t_view			*init_view(int gridlen, int gridht, int highest_alt);
+int				key_press(int keycode, void *param);
 int				get_default_color(t_tabla *fdfobj, int z);
 t_cpixels		swap_pixels(t_cpixels pix);
 int				get_color(t_tabla *fdfobj, t_cpixels pix, int cur_x, int cur_y);

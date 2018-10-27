@@ -6,42 +6,11 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 17:33:03 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/25 23:10:54 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/26 17:03:57 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-void	getisocord(t_tabla *fdfobj, t_view *view)
-{
-	int x;
-	int y;
-	int z;
-	int temx;
-	int temy;
-
-	x = 0;
-	y = 0;
-	while (y < (int)fdfobj->gridht)
-	{
-		while (x < (int)fdfobj->gridlen)
-		{
-			z = fdfobj->grid[y][x] * view->zoom; //ova za pogolema visina
-			temx = x * view->zoom;
-			temy = y * view->zoom;
-			
-			fdfobj->finalx[y][x] = (temx - temy) * cos(0.523599);// * ENLARGE;
-			fdfobj->finaly[y][x] = -z + (temx + temy) * sin(0.523599);// * ENLARGE;
-			// while (fdfobj->finalx[y][x] + view->xoffset < 30)
-			// 	view->xoffset += 10;
-			while (fdfobj->finaly[y][x] + view->offset > HEIGHT)
-				view->offset -= 30;
-			x++;
-		}
-		y++;
-		x = 0;
-	}
-}
 
 void	draw_horiz_lines(t_tabla *fdf, int x , int y, t_view *view)
 {
