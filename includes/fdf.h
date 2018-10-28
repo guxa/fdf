@@ -6,13 +6,9 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 23:26:16 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/28 00:02:03 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef BUF_SIZE
-# define BUF_SIZE 20
-#endif
 
 #ifndef FDF_H
 # define FDF_H
@@ -36,7 +32,6 @@
 # include <sys/acl.h>
 # include <sys/xattr.h>
 # include <limits.h>
-
 
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FdF  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -139,151 +134,5 @@ void			bresenhi(t_cpixels pix, t_tabla *ta);
 void			breshandler(t_cpixels pix, t_tabla *ta);
 int				mouse_press(int button, int x, int y, void *param);
 void			bresenhaml(t_cpixels pix, t_tabla *ta);
-
-// /*
-// ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FILLER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// */
-
-// typedef struct	s_triler
-// {
-// 	char		mychar;
-// 	char		enchar;
-// 	char		*line;
-// 	char		*buffer;
-// 	char		*rest;
-// 	size_t		length;
-// 	size_t		height;
-// 	char		**map;
-// 	size_t		theight;
-// 	size_t		tlength;
-// 	char		**token;
-// 	size_t		x;
-// 	size_t		y;
-// 	char		*temp;
-// 	int			bred;
-// 	int			starfound;
-// 	ssize_t		highscore;
-// 	size_t		playx;
-// 	size_t		playy;
-// 	int			navigate;
-// }				t_triler;
-
-// void			clearmap(t_triler *filer);
-// ssize_t			tcenter(t_triler *fil, size_t firstx, size_t firsty);
-// void			checkstatus(t_triler *fi, int co, int x);
-// ssize_t			targetmid(t_triler *fil, size_t firstx, size_t firsty);
-// ssize_t			endcorner(t_triler *fil, size_t firstx, size_t firsty);
-// ssize_t			stcorner(t_triler *fil, size_t firstx, size_t firsty);
-// char			*ft_strstr(const char *location, const char *target);
-// int				checkscore(t_triler *fil, size_t firstx, size_t firsty);
-// int				checkbefore(t_triler *fi, ssize_t tx, ssize_t ty);
-// int				checkafter(t_triler *fi, size_t tx, size_t ty);
-// int				getnextstar(t_triler *fi, size_t *tx, size_t *ty);
-// int				shapepos(t_triler *fi);
-// int				checkoptions(t_triler *fi);
-// int				getpiece(int filedesc, t_triler *filer);
-// int				getmapinfo(t_triler *fil);
-// int				readmap(int filedesc, t_triler *filer);
-// int				getplayer(t_triler *filer);
-// void			initfiler(t_triler *filer);
-// char			*ft_joinstr(const char *str1, const char *str2);
-// //int				checkresto(t_triler *filer);
-
-// /*
-// ** int				getlinija(int filedesc, t_triler *filer);
-// ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> B_LS + REK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// */
-
-// typedef struct	s_afile
-// {
-// 	struct timespec		fnano;
-// 	mode_t				permisii;
-// 	char				*name;
-// 	int					linksnum;
-// 	char				*user;
-// 	char				*group;
-// 	size_t				fsize;
-// 	time_t				timemod;
-// 	char				type;
-// 	char				xattr;
-// 	blkcnt_t			blocks;
-// 	char				linkedfile[1024];
-// 	struct s_afile		*next;
-
-// }				t_afile;
-
-// int				cmptime(t_afile *curr, t_afile *element);
-// int				sortjunk(char **argv, int argc, int flag, int x);
-// void			sortargvs(char **argv, int argc, int flag);
-// char			xattr(const char *path, t_afile *thefile);
-// void			getslink(const char *path, t_afile *thefile);
-// size_t			blockcounter(t_afile *alist);
-// void			clearlist(t_afile *head);
-// void			rtimesort(t_afile **head, t_afile *element);
-// void			timesort(t_afile **head, t_afile *element);
-// size_t			sizechecker(t_afile *alist);
-// void			printpermisii(mode_t filemode);
-// char			*getfilepath(const char *folder, const char *filename);
-// void			timeprinter(t_afile *dfile);
-// void			blsprinter(t_afile *filelist, const char *flags);
-// int				flagchecker(const char *flags);
-// void			revabcsort(t_afile **head, t_afile *element);
-// void			abcsort(t_afile **head, t_afile *element);
-// void			blslist(t_afile **head, t_afile *element, const char *flags);
-// t_afile			*fillelem(const char *path, char const *fname);
-// int				b_ls(const char *flags, const char *folder, int argc);
-// char			*ft_strcat(char *dest, const char *string);
-
-// /*
-// ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> B_PRINTF <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// */
-
-// int				numberhandler(void *number, char type);
-// int				myprinter(const char *str, int start, int end);
-// int				findarg(const char *format, va_list ap);
-// int				parser(const char *format, va_list ap);
-// char			*ft_itoa_base(long number, int base);
-
-// typedef struct	s_strlist
-// {
-// 	void				*data;
-// 	int					argpos;
-// 	int					is_arg;
-// 	char				argtype;
-// 	struct s_strlist	*next;
-
-// }				t_strlist;
-
-// void			listadd(t_strlist **mainlist, t_strlist *newelem);
-// t_strlist		*newlistelem(char const *inputstr, int start, int end);
-// t_strlist		*ft_add_elem(void *data);
-// int				b_printf(const char *format, ...);
-// int				is_vartype(char c);
-// void			oldlistadd(t_strlist **mainlist, const char *newstr);
-// char			*cutstr(char const *inputstr, int start, int end);
-// char			*ft_newstr(size_t size);
-// int				countdigits(long number, int base);
-// int				myatoi_base(const char *str, int str_base);
-// void			printhex(unsigned int x);
-
-// /*
-// ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> B_LIB & STUFF <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// */
-// void			ft_memdel(void **ap);
-// void			ft_putnbr(int nb);
-// void			ft_putstr(char *str);
-// void			ft_putchar(char c);
-// int				ft_atoi(char *str);
-
-// char			*ft_strcpy(char *dst, const char *src);
-// char			*ft_strncpy(char *dst, const char *src, size_t len);
-// size_t			ft_strlen(const char *s);
-// char			*ft_strdup(const char *s1);
-// int				ft_strcmp(const char *s1, const char *s2);
-// char			*ft_strchr(const char *s, int c);
-// int				ft_isdigit(int c);
-// int				ft_tolower(int c);
-// int				ft_toupper(int c);
-// void			*ft_memset(void *b, int c, size_t len);
 
 #endif
