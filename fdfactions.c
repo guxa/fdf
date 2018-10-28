@@ -6,10 +6,11 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 18:15:56 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 00:08:14 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 23:00:46 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fdf.h"
 #include "libft.h"
 #include "key_macros.h"
 
@@ -43,5 +44,22 @@ void	change_altitude(int keycode, t_tabla *fdfobj)
 		fdfobj->view->z_multiplier += 0.1;
 	else
 		fdfobj->view->z_multiplier -= 0.1;
+	generateimg(fdfobj);
+}
+
+void	rotate(int key, t_tabla *fdfobj)
+{
+	if (key == NUM_PAD_4)
+		fdfobj->view->beta -= 0.05;
+	else if (key == NUM_PAD_6)
+		fdfobj->view->beta += 0.05;
+	else if (key == NUM_PAD_2)
+		fdfobj->view->alpha -= 0.05;
+	else if (key == NUM_PAD_8)
+		fdfobj->view->alpha += 0.05;
+	else if (key == NUM_PAD_1)
+		fdfobj->view->gamma -= 0.05;
+	else if (key == NUM_PAD_9)
+		fdfobj->view->gamma += 0.05;
 	generateimg(fdfobj);
 }

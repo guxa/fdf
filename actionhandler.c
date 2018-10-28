@@ -6,24 +6,25 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/20 18:43:33 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 00:51:00 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 22:59:54 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fdf.h"
 #include "libft.h"
 #include "key_macros.h"
 
-int mouse_press(int button, int x, int y, void *param)
+int		mouse_press(int button, int x, int y, void *param)
 {
 	t_tabla		*fdf;
 
 	fdf = param;
 	x = y;
 	if (button == MOUSE_SCROLL_DOWN || button == MOUSE_SCROLL_UP)
-		{
-			zoom(button, fdf);
-			return (0);
-		}
+	{
+		zoom(button, fdf);
+		return (0);
+	}
 	if (button == 1)
 		fdf->mclicked += 1;
 	return (0);
@@ -60,7 +61,7 @@ int		mouse_move(int x, int y, void *param)
 	return (0);
 }
 
-int	key_press(int keycode, void *param)
+int		key_press(int keycode, void *param)
 {
 	t_tabla		*fdf;
 
@@ -91,6 +92,6 @@ int		close_app(void *param)
 	t_tabla		*fdf;
 
 	fdf = param;
-	exit (0);
+	exit(0);
 	return (0);
 }

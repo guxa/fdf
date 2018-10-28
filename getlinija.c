@@ -6,10 +6,11 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/10 17:10:19 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 18:52:19 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 23:22:03 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fdf.h"
 #include "libft.h"
 
 int		getlinija(int filedesc, char **line, char *buffer)
@@ -39,7 +40,6 @@ int		getlinija(int filedesc, char **line, char *buffer)
 	}
 	rest = 0;
 	return (ft_strlen(*line) > 0 ? 1 : 0);
-	// ovde bese samo return (0); bez rest = 0, i drugava logika
 }
 
 int		checkresto(char **line, char **rest)
