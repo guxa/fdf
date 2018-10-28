@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 19:05:04 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 01:10:25 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 18:16:20 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define PINK 0xD138BF
 # define BLDBLUE 0x7494EA
 # define SCYAN 0x44CCFF
-# define SBLACK 0xE5C1BD//0x494947
+# define SBLACK 0x0A0C16
 /*
 ** >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FdF  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
@@ -105,6 +105,10 @@ typedef struct	s_fdflines
 	struct s_fdflines	*next;
 }				t_fdflines;
 
+void			clear_list(t_fdflines **head, char *laststr);
+void			exit_app(const char *source);
+void			initxyarr(t_tabla *fdfobj);
+t_tabla			*tabinit(void);
 void			change_altitude(int keycode, t_tabla *fdfobj);
 void			paralelprojection(t_tabla *fdfobj);
 int				close_app(void *param);
@@ -123,12 +127,11 @@ int				get_color(t_tabla *fdfobj, t_cpixels pix, int cur_x, int cur_y);
 void			insert_pixel(t_tabla *fdf, int x, int y, int color);
 void			generateimg(t_tabla *fdfobj);
 void			drawgrid(t_tabla *fdfobj, t_view *view);
-int				makeintarr(t_fdflines *lista, t_tabla *fdfobj);
+void			makeintarr(t_fdflines *lista, t_tabla *fdfobj);
 char			**ft_split(char *str);
-void			addtolist(void **head, void *element);
 int				checkresto(char **line, char **rest);
 int				getlinija(int filedesc, char **line, char *buffer);
-int				parsefdf(const char *filepath, t_tabla *fdfobj);
+void			parsefdf(const char *filepath, t_tabla *fdfobj);
 void			bresenhi(t_cpixels pix, t_tabla *ta);
 void			breshandler(t_cpixels pix, t_tabla *ta);
 int				mouse_press(int button, int x, int y, void *param);

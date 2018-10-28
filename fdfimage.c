@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 23:34:15 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 00:56:05 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 18:02:58 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_view		*init_view(int gridlen, int gridht, int highest_alt)
 	t_view *uview;
 
 	if ((uview = malloc(sizeof(t_view))) == NULL)
-		return (NULL);
+		exit_app("Malloc inside init_view() failed");
 	uview->zoom = (WIDTH / gridlen <= HEIGHT / gridht ?
 					(WIDTH - MENU) / gridlen / 2 : HEIGHT / gridht / 2);
 	uview->zoom = (uview->zoom == 0 ? 1 : uview->zoom);
@@ -72,7 +72,6 @@ static void		print_menu(t_tabla *fdfobj)
 	int y;
 
 	y = MENU / 10;
-
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, y, LGREEN, "Commands");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 50), LGREEN, "Zoom:");
 	mlx_string_put(fdfobj->mlxptr, fdfobj->winptr, MENU / 10, (y += 25), SCYAN, "Mouse Scroll");
@@ -109,14 +108,7 @@ void			generateimg(t_tabla *fdfobj)
 		//((int*)(fdfobj->data_add))[i] = (i % WIDTH <= MENU ? 0x222222 : 0x000000); //0x9A1F6A
 		i++;
 	}
-	//img_background(fdfobj);
 	drawgrid(fdfobj, fdfobj->view);
 	mlx_put_image_to_window(fdfobj->mlxptr, fdfobj->winptr, fdfobj->img, 0, 0);
 	print_menu(fdfobj);
 }
-
-// while (j < (mlx->bpp / 8))
-//     {
-//         *(mlx->addr + (mlx->lsize * y + ((mlx->bpp * x) / 8) + j)) = mlx->color >> (8 * j) & 0xff;
-//         j++;
-// 	}

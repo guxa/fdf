@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 02:04:40 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 00:04:18 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 18:29:51 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,9 @@ void	paralelprojection(t_tabla *fdfobj)
 	{
 		while (x < (int)fdfobj->gridlen)
 		{
-			z = fdfobj->grid[y][x] * fdfobj->view->zoom; //ova za pogolema visina
-
-			fdfobj->finalx[y][x] = x * fdfobj->view->zoom;// * ENLARGE;
-			fdfobj->finaly[y][x] = y * fdfobj->view->zoom;// * ENLARGE;
+			z = fdfobj->grid[y][x] * fdfobj->view->zoom;
+			fdfobj->finalx[y][x] = x * fdfobj->view->zoom;
+			fdfobj->finaly[y][x] = y * fdfobj->view->zoom;
 			rotatex(fdfobj->view->alpha, &(fdfobj->finaly[y][x]), &z);
 			rotatey(fdfobj->view->beta, &(fdfobj->finalx[y][x]), &z);
 			rotatez(fdfobj->view->gamma, &(fdfobj->finalx[y][x]), &(fdfobj->finaly[y][x]));

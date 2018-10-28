@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:56:34 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/26 22:04:10 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 20:30:27 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,21 @@ static int		isdelimiter(char c)
 	return (0);
 }
 
-static size_t	countwords(char *str)
+/*
+** vo countwords (*x) se prakat za ako stringot pocvit so ' ' ili '\t' i sl.
+** da ne vlezat vo prviot word/str praznite mesta, tuku da gi skoknit niv
+*/
+
+static size_t	countwords(char *str, int *x)
 {
 	size_t i;
 	size_t words;
 
 	i = 0;
 	words = 1;
+	while (str[i] && isdelimiter(str[i]))
+		i++;
+	*x = i;
 	while (str[i])
 	{
 		if (isdelimiter(str[i]))
@@ -58,7 +66,7 @@ char			**ft_split(char *str)
 	x = 0;
 	if (str[0] == '\0')
 		return (NULL);
-	words = countwords(str);
+	words = countwords(str, &x);
 	strar = malloc(sizeof(char*) * words + 1);
 	while (i < words)
 	{

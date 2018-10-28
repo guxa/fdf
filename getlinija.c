@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/10 17:10:19 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/21 00:08:49 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/27 18:52:19 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int		getlinija(int filedesc, char **line, char *buffer)
 {
-	char	*nl;
-	int		bred;
-	char	*temp;
+	char		*nl;
+	int			bred;
+	char		*temp;
 	static char *rest;
 
 	if (checkresto(line, &rest))
