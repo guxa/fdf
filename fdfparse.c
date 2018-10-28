@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:45:44 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/27 23:00:54 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/28 01:31:57 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static void	store_alt_color(char **strarr, t_tabla *fdf, int x, int length)
 	tem = NULL;
 	if ((fdf->colors[x] = malloc(sizeof(int) * length)) == NULL)
 		exit_app("Malloc in store_alt_color() failed");
-	while (strarr[i] && ft_isdigit(strarr[i][0]))
+	while (strarr[i] && strarr[i][0] != '\0')
 	{
 		fdf->colors[x][i] = -1;
 		if ((tem = ft_strchr(strarr[i], ',')))
@@ -99,7 +99,7 @@ static void	store_alt_color(char **strarr, t_tabla *fdf, int x, int length)
 		i++;
 	}
 	if (fdf->gridlen != 0 && i != (int)fdf->gridlen)
-		exit_app("Invalid map format - fdf->gridlen");
+		exit_app("Invalid map file (map line length)");
 	fdf->gridlen = i;
 }
 
