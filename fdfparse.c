@@ -6,7 +6,7 @@
 /*   By: jguleski <jguleski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 00:45:44 by jguleski          #+#    #+#             */
-/*   Updated: 2018/10/28 01:31:57 by jguleski         ###   ########.fr       */
+/*   Updated: 2018/10/28 01:54:32 by jguleski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	free_strarr(char **arr)
 /*
 ** store_alt_color, gets the altitude Z and color (if specified) for each
 ** point of the map, if there is no color for that point, -1 is inserted
-** check in while loop is_digit, not to parse empty "" or invalid str
+** check in while loop not to parse empty "" or invalid str
 ** go baram samo max Z, potrebna za get color, a ko min Z se koristit 0
 */
 
@@ -85,7 +85,7 @@ static void	store_alt_color(char **strarr, t_tabla *fdf, int x, int length)
 	tem = NULL;
 	if ((fdf->colors[x] = malloc(sizeof(int) * length)) == NULL)
 		exit_app("Malloc in store_alt_color() failed");
-	while (strarr[i] && strarr[i][0] != '\0')
+	while (strarr[i] && (ft_isdigit(strarr[i][0]) || strarr[i][0] == '-'))
 	{
 		fdf->colors[x][i] = -1;
 		if ((tem = ft_strchr(strarr[i], ',')))
